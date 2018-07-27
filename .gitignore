@@ -116,5 +116,5 @@ out
 .idea/
 build/
 ci/assets/
-ci/credentials-ecslab.yml
+ci/credentials.yml
 ci/scripts/
