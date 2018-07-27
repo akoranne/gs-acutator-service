@@ -1,0 +1,72 @@
+# Register the metadata resource type
+resource_types:
+  - name: metadata
+    type: docker-image
+    source:
+      repository: olhtbr/metadata-resource
+
+resources:
+  # The resource does not need any configuration
+  - name: metadata
+    type: metadata
+
+  # GitHub release resource
+  # Check https://github.com/concourse/github-release-resource#source-configuration for more info
+  - name: release
+    type: github-release
+    source:
+      owner: ((git-owner))
+      repository: ((git-repo))
+      acces_token: ((git-token))
+      # other settings...
+
+jobs:
+  - name: prepare-release
+    plan:
+      - get: metadata
+      - get: release
+
+      - task: setup-release-properties
+        config:
+          platform: linux
+          image_resource:
+            type: docker-image
+            source:
+              repository: busybox
+
+          inputs:
+            - name: metadata
+
+          # A URL to the build and other release properties
+          # will be available as files in the properties folder
+          outputs:
+            - name: properties
+
+          run:
+            path: sh
+            args:
+              - -exc
+              - |
+                # Grab the metadata
+                url=$(cat metadata/atc_external_url)
+                team=$(cat metadata/build_team_name)
+                pipeline=$(cat metadata/build_pipeline_name)
+                job=$(cat metadata/build_job_name)
+                build=$(cat metadata/build_name)
+
+                # Generate the build URL to a file
+                echo $url/teams/$team/pipelines/$pipeline/jobs/$job/builds/$build > properties/body
+
+                # Write the release name to a file
+                echo v0.1.0 > properties/name
+
+                # The tag must already exist in git
+                echo 0.1.0 > properties/tag
+
+      # The put step creates a new GitHub release at the specified tag and
+      # its body will contain a link to the current build
+      - put: release
+        params:
+          name: properties/name
+          tag: properties/tag
+          body: properties/body

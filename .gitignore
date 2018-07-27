@@ -115,6 +115,6 @@ out
 !.mvn/wrapper/maven-wrapper.jar
 .idea/
 build/
-ci/assets/
+ci/credentials
 ci/credentials.yml
-ci/scripts/
+ci/secrets
