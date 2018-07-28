@@ -1,0 +1,69 @@
+groups:
+- name: gs-acutator-service
+  jobs:
+  - build
+  - service-unit
+
+resource_types:
+- name: meta
+  type: docker-image
+  source:
+    repository: swce/metadata-resource
+- name: keyval
+  type: docker-image
+  source:
+    repository: swce/keyval-resource
+
+resources:
+- name: meta
+  type: meta
+- name: keyval
+  type: keyval
+- name: service-repo
+  type: git
+  source:
+    uri: {{git-url}}
+    branch: {{git-branch}}
+    # username: ((git-username))
+    # password: ((git-passwd))
+
+jobs:
+- name: meta
+  public: true
+  serial: true
+  plan:
+    - get: meta
+      trigger: true
+    - task: metadata
+      file: tools/tasks/build/task.yml
+    - put: keyval
+      params:
+        file: keyvalout/keyval.properties
+- name: build-service
+  public: true
+  serial: true
+  plan:
+  - get: keyval
+  - get: service-repo
+    trigger: true
+  - task: create-archive
+    file: service-repo/ci/tasks/build-service/task.yml
+
+# - name: test-meta
+#   plan:
+#     - get: keyval
+#     - task: test-meta
+#       #file: tools/tasks/prod-deploy/task.yml
+#       config:
+#         platform: linux
+#         image_resource:
+#           type: docker-image
+#           source:
+#             repository: busybox
+#         outputs:
+#           - name: build_output
+#         run:
+#           path: sh
+#           args:
+#             - -exc
+#             - |
