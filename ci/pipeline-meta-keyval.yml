@@ -3,10 +3,12 @@ resource_types:
   type: docker-image
   source:
     repository: swce/metadata-resource
+    tag: latest
 - name: keyval
   type: docker-image
   source:
     repository: swce/keyval-resource
+    tag: latest
 
 resources:
 - name: meta
@@ -22,19 +24,18 @@ resources:
     # password: ((git-passwd))
 
 jobs:
-- name: build
-  plan:
-    - get: meta
-    - task: build
-      file: tools/tasks/build/task.yml
-    - put: keyval
-      params:
-        file: keyvalout/keyval.properties
+# - name: build
+#   plan:
+#     - get: meta
+#     - task: build
+#       file: tools/tasks/build/task.yml
+#     - put: keyval
+#       params:
+#         file: keyvalout/keyval.properties
 - name: build-service
-  public: true
-  serial: true
   plan:
   - get: meta
+  - get: keyval
   - get: service-repo
     trigger: true
   - task: create-archive
@@ -43,10 +44,11 @@ jobs:
     params:
       file: keyvalout/keyval.properties
 
-# - name: test-meta
-#   plan:
-#     - get: keyval
-#     - task: test-meta
+- name: test-meta
+  plan:
+    - get: keyval
+    - task: test-meta
+      file: tools/tasks/prod-deploy/task.yml
 #       #file: tools/tasks/prod-deploy/task.yml
 #       config:
 #         platform: linux
