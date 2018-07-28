@@ -54,6 +54,12 @@ jobs:
                 job=$(cat metadata/build_job_name)
                 build=$(cat metadata/build_name)
 
+                echo "url - ${url}"
+                echo "team - ${team}"
+                echo "pipeline - ${pipeline}"
+                echo "job - ${job}"
+                echo "build - ${build}"
+
                 # Generate the build URL to a file
                 echo $url/teams/$team/pipelines/$pipeline/jobs/$job/builds/$build > properties/body
 
