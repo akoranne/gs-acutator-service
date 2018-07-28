@@ -55,9 +55,9 @@ echo " .. TODO - need artifactory endpoints "
 #
 
 # TODO - move to variables
-group="com.jh"
-build_number="0.0.2-SNAPSHOT"
-build_name="jh-policy-poc"
+group="com.sakx"
+build_number="0.0.1-SNAPSHOT"
+build_name="gs-actuator-service"
 
 # jfrog target command-name global-options command-options arguments
 
