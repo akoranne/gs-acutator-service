@@ -2,7 +2,6 @@ groups:
 - name: gs-acutator-service
   jobs:
   - build
-  - service-unit
 
 resource_types:
 - name: meta
@@ -28,13 +27,10 @@ resources:
     # password: ((git-passwd))
 
 jobs:
-- name: meta
-  public: true
-  serial: true
+- name: build
   plan:
     - get: meta
-      trigger: true
-    - task: metadata
+    - task: build
       file: tools/tasks/build/task.yml
     - put: keyval
       params:
@@ -43,11 +39,14 @@ jobs:
   public: true
   serial: true
   plan:
-  - get: keyval
+  - get: meta
   - get: service-repo
     trigger: true
   - task: create-archive
     file: service-repo/ci/tasks/build-service/task.yml
+  - put: keyval
+    params:
+      file: keyvalout/keyval.properties
 
 # - name: test-meta
 #   plan:

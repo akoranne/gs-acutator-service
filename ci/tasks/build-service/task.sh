@@ -7,6 +7,20 @@ echo ""
 echo " .. Running build"
 echo ""
 
+pipeline_id=`cat "${ROOT_FOLDER}/meta/build-name"`
+echo "Pipeline id is $pipeline_id"
+export "PASSED_PIPELINE_ID=$pipeline_id"
+
+
+echo "url - ${ATC_EXTERNAL_URL}"
+echo "team - ${BUILD_TEAM_NAME}"
+echo "pipeline - ${BUILD_PIPELINE_NAME}"
+echo "job - ${BUILD_JOB_NAME}"
+echo "build - ${BUILD_NAME}"
+echo "build-id - ${BUILD_ID}"
+
+exit 1;
+
 cd service-repo
 
 # gradle build
