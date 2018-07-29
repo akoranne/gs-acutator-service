@@ -4,11 +4,16 @@ resource_types:
   source:
     repository: swce/metadata-resource
     tag: latest
+    username: ((docker-user))
+    password: ((docker-passwd))
+
 - name: keyval
   type: docker-image
   source:
     repository: swce/keyval-resource
     tag: latest
+    username: ((docker-user))
+    password: ((docker-passwd))
 
 resources:
 - name: meta
@@ -35,7 +40,6 @@ jobs:
 - name: build-service
   plan:
   - get: meta
-  - get: keyval
   - get: service-repo
     trigger: true
   - task: create-archive
