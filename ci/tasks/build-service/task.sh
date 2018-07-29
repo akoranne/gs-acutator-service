@@ -6,8 +6,7 @@ set -e # fail fast
 echo ""
 echo " .. Running build"
 echo ""
-echo "${ROOT_FOLDER}";
-pipeline_id=`cat "${ROOT_FOLDER}/metadata/build-name"`
+pipeline_id=`cat "metadata/build-name"`
 echo "Pipeline id is $pipeline_id"
 export "PASSED_PIPELINE_ID=$pipeline_id"
 
