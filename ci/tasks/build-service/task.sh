@@ -18,11 +18,11 @@ export build_pipeline_name=$(cat "metadata/build-pipeline-name");
 export build_team_name=$(cat "metadata/build-team-name");
 
 echo "url - ${atc_external_url}"
-echo "team - ${build_team_name}"
-echo "pipeline - ${build_pipeline_name}"
+echo "build-id - ${build_id}"
 echo "job - ${build_job_name}"
 echo "build - ${build_name}"
-echo "build-id - ${build_id}"
+echo "pipeline - ${build_pipeline_name}"
+echo "team - ${build_team_name}"
 
 exit 1;
 
