@@ -16,7 +16,7 @@ resource_types:
     password: ((docker-passwd))
 
 resources:
-- name: meta
+- name: meta-data
   type: meta
 - name: keyval
   type: keyval
@@ -39,7 +39,7 @@ jobs:
 #         file: keyvalout/keyval.properties
 - name: build-service
   plan:
-  - get: meta
+  - get: meta-data
   - get: service-repo
     trigger: true
   - task: create-archive
