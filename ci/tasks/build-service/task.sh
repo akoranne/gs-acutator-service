@@ -10,13 +10,19 @@ pipeline_id=`cat "metadata/build-name"`
 echo "Pipeline id is $pipeline_id"
 export "PASSED_PIPELINE_ID=$pipeline_id"
 
+export atc_external_url=$(cat "metadata/atc-external-url");
+export build_id=$(cat "metadata/build-id");
+export build_job_name=$(cat "metadata/build-job-name");
+export build_name=$(cat "metadata/build-name");
+export build_pipeline_name=$(cat "metadata/build-pipeline-name");
+export build_team_name=$(cat "metadata/build-team-name");
 
-echo "url - ${ATC_EXTERNAL_URL}"
-echo "team - ${BUILD_TEAM_NAME}"
-echo "pipeline - ${BUILD_PIPELINE_NAME}"
-echo "job - ${BUILD_JOB_NAME}"
-echo "build - ${BUILD_NAME}"
-echo "build-id - ${BUILD_ID}"
+echo "url - ${atc_external_url}"
+echo "team - ${build_team_name}"
+echo "pipeline - ${build_pipeline_name}"
+echo "job - ${build_job_name}"
+echo "build - ${build_name}"
+echo "build-id - ${build_id}"
 
 exit 1;
 
