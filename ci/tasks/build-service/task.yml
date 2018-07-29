@@ -6,12 +6,12 @@ image_resource:
   source:
     repository: askxtreme/java8-node
     tag: base
-    username: ((docker-user))
-    password: ((docker-passwd))
+    # username: ((docker-user))
+    # password: ((docker-passwd))
 
 inputs:
-  - name: meta-data
   - name: service-repo
+  - name: meta-data
 
 outputs:
   - name: build-output
