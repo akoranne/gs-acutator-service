@@ -10,7 +10,7 @@ image_resource:
     # password: ((docker-passwd))
 
 inputs:
-  - name: metadata
+  - name: keyval
   - name: service-repo
 
 outputs:
