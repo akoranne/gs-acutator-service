@@ -14,7 +14,7 @@ echo "Repo resource folder is [${REPO_RESOURCE}]"
 echo "KeyVal resource folder is [${KEYVAL_RESOURCE}]"
 
 # import common functions
-source "${ROOT_FOLDER}/${REPO_RESOURCE}/ci/resource-utils.sh"
+source "${ROOT_FOLDER}/${REPO_RESOURCE}/ci/tasks/resource-utils.sh"
 
 # export passed properties to env
 exportKeyValProperties
