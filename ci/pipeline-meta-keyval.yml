@@ -29,14 +29,6 @@ resources:
     # password: ((git-passwd))
 
 jobs:
-# - name: build
-#   plan:
-#     - get: meta
-#     - task: build
-#       file: tools/tasks/build/task.yml
-#     - put: keyval
-#       params:
-#         file: keyvalout/keyval.properties
 - name: meta-data
   plan:
   - get: metadata
@@ -50,7 +42,7 @@ jobs:
     params:
       file: keyvalout/keyval.properties
 
-- name: test-meta
+- name: build
   plan:
   - aggregate:
     - get: service-repo
@@ -58,7 +50,7 @@ jobs:
       passed:
       - meta-data
 #      trigger: true
-    - task: test-meta
+    - task: build-archive
       file: service-repo/ci/tasks/build-service/task.yml
 
 #       config:
