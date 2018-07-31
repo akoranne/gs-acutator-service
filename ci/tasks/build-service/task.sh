@@ -36,8 +36,6 @@ echo ""
 # echo "pipeline - ${build_pipeline_name}"
 # echo "team - ${build_team_name}"
 
-exit 1;
-
 cd service-repo
 
 # gradle build

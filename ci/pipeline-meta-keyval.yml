@@ -44,18 +44,17 @@ jobs:
 
 - name: build
   plan:
-  - aggregate:
-    - get: keyval
-    - get: service-repo
-      passed:
-      - meta-data
-      trigger: true
-    - task: build-and-upload
-      privileged: true
-      file: service-repo/ci/tasks/build-service/task.yml
-    - put: keyval
-      params:
-        file: keyvalout/keyval.properties
+  - get: keyval
+  - get: service-repo
+    passed:
+    - meta-data
+    trigger: true
+  - task: build-and-upload
+    privileged: true
+    file: service-repo/ci/tasks/build-service/task.yml
+  - put: keyval
+    params:
+      file: keyvalout/keyval.properties
 #       config:
 #         platform: linux
 #         image_resource:
