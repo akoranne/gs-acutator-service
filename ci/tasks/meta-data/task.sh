@@ -11,9 +11,6 @@ propsFile="${propsDir}/keyval.properties"
 mkdir -p "${ROOT_FOLDER}/${KEYVALOUTPUT_RESOURCE}"
 touch "${propsFile}"
 
-### TODO: parameterize this
-group="com.sakx"
-
 echo ""
 echo " .. Running 'meta-data' task"
 echo ""
@@ -31,7 +28,7 @@ echo "build_job_name=${build_job_name}" >> "${propsFile}"
 echo "build_name=${build_name}" >> "${propsFile}"
 echo "build_pipeline_name=${build_pipeline_name}" >> "${propsFile}"
 echo "build_team_name=${build_team_name}" >> "${propsFile}"
-echo "group=${group}" >> "${propsFile}"
+echo "group=${GROUP}" >> "${propsFile}"
 
 echo "url - ${atc_external_url}"
 echo "build-id - ${build_id}"
@@ -39,7 +36,7 @@ echo "job - ${build_job_name}"
 echo "build - ${build_name}"
 echo "pipeline - ${build_pipeline_name}"
 echo "team - ${build_team_name}"
-echo "group - ${group}"
+echo "group - ${GROUP}"
 
 echo ""
 echo " Metadata completed!!!"

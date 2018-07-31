@@ -37,14 +37,15 @@ jobs:
 #     - put: keyval
 #       params:
 #         file: keyvalout/keyval.properties
-- name: build-service
+- name: meta-data
   plan:
   - get: metadata
+  - get: service-repo
     trigger: true
-  - task: create-archive
-    file: service-repo/ci/tasks/build-service/task.yml
+  - task: gen-meta-data
+    file: service-repo/ci/tasks/meta-data/task.yml
     params:
-      group: {{group}}
+      GROUP: {{group}}
   - put: keyval
     params:
       file: keyvalout/keyval.properties
@@ -55,7 +56,7 @@ jobs:
     - get: service-repo
     - get: keyval
       passed:
-      - build-service
+      - meta-data
 #      trigger: true
     - task: test-meta
       file: service-repo/ci/tasks/build-service/task.yml
