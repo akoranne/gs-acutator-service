@@ -4,6 +4,7 @@ set -e # fail fast
 # set -x # print commands
 
 export ROOT_FOLDER="$( pwd )"
+export KEYVAL_RESOURCE=keyval
 export KEYVALOUTPUT_RESOURCE=keyvalout
 propsDir="${ROOT_FOLDER}/${KEYVALOUTPUT_RESOURCE}"
 propsFile="${propsDir}/keyval.properties"
@@ -15,28 +16,19 @@ touch "${propsFile}"
 echo ""
 echo " .. Running build"
 echo ""
-pipeline_id=""$( cat metadata/build-name )"
-echo "Pipeline id is $pipeline_id"
-export "PASSED_PIPELINE_ID=$pipeline_id"
-
-for prop in "$(ls -1 ${ROOT_FOLDER}/metadata)";
-do
-  echo "$prop :- $(cat ${ROOT_FOLDER}/metadata/${prop})";
-done;
-
 export atc_external_url="$(cat metadata/atc-external-url)";
 export build_id="$(cat metadata/build-id)";
 export build_job_name="$(cat metadata/build-job-name)";
 export build_name="$(cat metadata/build-name)";
 export build_pipeline_name="$(cat metadata/build-pipeline-name)";
-export build_team_name=$(cat metadata/build-team-name)";
+export build_team_name="$(cat metadata/build-team-name)";
 
 echo "atc_external_url=${atc_external_url}" >> "${propsFile}"
-echo "build_id=${atc_external_url}" >> "${propsFile}"
-echo "build_job_name=${atc_external_url}" >> "${propsFile}"
-echo "build_name=${atc_external_url}" >> "${propsFile}"
-echo "build_pipeline_name=${atc_external_url}" >> "${propsFile}"
-echo "build_team_name=${atc_external_url}" >> "${propsFile}"
+echo "build_id=${build_id}" >> "${propsFile}"
+echo "build_job_name=${build_job_name}" >> "${propsFile}"
+echo "build_name=${build_name}" >> "${propsFile}"
+echo "build_pipeline_name=${build_pipeline_name}" >> "${propsFile}"
+echo "build_team_name=${build_team_name}" >> "${propsFile}"
 
 echo "url - ${atc_external_url}"
 echo "build-id - ${build_id}"

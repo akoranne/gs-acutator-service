@@ -40,20 +40,26 @@ jobs:
 - name: build-service
   plan:
   - get: metadata
-  - get: service-repo
     trigger: true
   - task: create-archive
     file: service-repo/ci/tasks/build-service/task.yml
+    params:
+      group: {{group}}
   - put: keyval
     params:
       file: keyvalout/keyval.properties
 
 - name: test-meta
   plan:
+  - aggregate:
+    - get: service-repo
     - get: keyval
+      passed:
+      - build-service
+#      trigger: true
     - task: test-meta
-      file: tools/tasks/prod-deploy/task.yml
-#       #file: tools/tasks/prod-deploy/task.yml
+      file: service-repo/ci/tasks/build-service/task.yml
+
 #       config:
 #         platform: linux
 #         image_resource:
