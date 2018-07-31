@@ -23,48 +23,7 @@ echo ""
 echo " .. Running build"
 echo ""
 
-env
-
-exit 1;
-
-
-
-#  BUILD_ID:
-#  BUILD_TEAM_NAME:
-#  BUILD_PIPELINE_NAME:
-#  build_number: "${BUILD_ID}"
-#  build_name: "http://localhost:8080/teams/${BUILD_TEAM_NAME}/pipelines/${BUILD_PIPELINE_NAME}"
-  # ATC_EXTERNAL_URL:
-  # BUILD_ID:
-  # BUILD_JOB_NAME:
-  # BUILD_NAME:
-  # BUILD_PIPELINE_NAME:
-  # BUILD_TEAM_NAME:
-
-
-
-# export atc_external_url="$(cat metadata/atc-external-url)";
-# export build_id="$(cat metadata/build-id)";
-# export build_job_name="$(cat metadata/build-job-name)";
-# export build_name="$(cat metadata/build-name)";
-# export build_pipeline_name="$(cat metadata/build-pipeline-name)";
-# export build_team_name="$(cat metadata/build-team-name)";
-#
-# echo "atc_external_url=${atc_external_url}" >> "${propsFile}"
-# echo "build_id=${build_id}" >> "${propsFile}"
-# echo "build_job_name=${build_job_name}" >> "${propsFile}"
-# echo "build_name=${build_name}" >> "${propsFile}"
-# echo "build_pipeline_name=${build_pipeline_name}" >> "${propsFile}"
-# echo "build_team_name=${build_team_name}" >> "${propsFile}"
-#
-# echo "url - ${atc_external_url}"
-# echo "build-id - ${build_id}"
-# echo "job - ${build_job_name}"
-# echo "build - ${build_name}"
-# echo "pipeline - ${build_pipeline_name}"
-# echo "team - ${build_team_name}"
-
-cd service-repo
+cd $REPO_RESOURCE
 
 # gradle build
 export GRADLE_OPTS="-Dorg.gradle.native=false"
@@ -111,27 +70,28 @@ echo " .. TODO - need artifactory endpoints "
 #
 #
 
-# TODO - move to variables
-group="com.sakx"
-build_number="0.0.1-SNAPSHOT"
-build_name="gs-actuator-service"
+# metadata variables
+group=${group}
+build_number="${build_id}"
+build_name="${atc_external_url}/teams/${build_team_name}/pipelines/${build_pipeline_name}"
 
-# jfrog target command-name global-options command-options arguments
-
-
+### TODO move to secrets
 jfrog rt config rt-server-1 --user=admin --password=password --url=http://artifactory:8081/artifactory
 jfrog rt show
-jfrog rt u "../build-output/*" "example-repo-local/${group}/${vers}/" --dry-run
-#    --build-name="http://localhost:8080/teams/${BUILD_TEAM_NAME}/pipelines/${BUILD_PIPELINE_NAME}" \
-#    --build-number="${BUILD_ID}" \
+jfrog rt u "../build-output/*" "example-repo-local/${group}/${vers}/" \
+  --flat=false \
+  --build-name="${build_name}" \
+  --build-number="${build_number}"
+#  --dry-run
 
 # jfrog rt d "../build-output/*" libs-release-local/zipFiles/
 
 echo ""
+echo " Build Id:  ${build_number}"
+echo " Build Url: ${build_name}"
 echo " Build completed!!!"
 echo ""
 
 
+# write passed properties out
 passKeyValProperties
-
-exit 1;
