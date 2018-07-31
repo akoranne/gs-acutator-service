@@ -20,7 +20,7 @@ outputs:
 params:
   TERM: -dumb
   GRADLE_OPTS: -Dorg.gradle.native=false
-  GROUP: 
+  GROUP:
 #  BUILD_ID:
 #  BUILD_TEAM_NAME:
 #  BUILD_PIPELINE_NAME:
@@ -38,4 +38,4 @@ params:
 #  args: ["--build-file", "source-code/build.gradle", "build"]
 
 run:
-  path: service-repo/ci/tasks/build-service/task.sh
+  path: service-repo/ci/tasks/meta-data/task.sh
