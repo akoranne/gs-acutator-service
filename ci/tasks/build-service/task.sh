@@ -7,7 +7,7 @@ export ROOT_FOLDER="$( pwd )"
 export REPO_RESOURCE="service-repo"
 export KEYVAL_RESOURCE=keyval
 export KEYVALOUTPUT_RESOURCE=keyvalout
-export BUILD_OUTPUT="${ROOT_FOLDER}/../build-output"
+export BUILD_OUTPUT="${ROOT_FOLDER}/build-output"
 
 echo "Root folder is [${ROOT_FOLDER}]"
 echo "Repo resource folder is [${REPO_RESOURCE}]"
