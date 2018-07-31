@@ -41,5 +41,3 @@ echo "group - ${GROUP}"
 echo ""
 echo " Metadata completed!!!"
 echo ""
-
-exit 0;
