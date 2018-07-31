@@ -4,17 +4,45 @@ set -e # fail fast
 # set -x # print commands
 
 export ROOT_FOLDER="$( pwd )"
+export REPO_RESOURCE="service-repo"
 export KEYVAL_RESOURCE=keyval
 export KEYVALOUTPUT_RESOURCE=keyvalout
-propsDir="${ROOT_FOLDER}/${KEYVALOUTPUT_RESOURCE}"
-propsFile="${propsDir}/keyval.properties"
+export BUILD_OUTPUT="build-output"
 
-mkdir -p "${ROOT_FOLDER}/${KEYVALOUTPUT_RESOURCE}"
-touch "${propsFile}"
+echo "Root folder is [${ROOT_FOLDER}]"
+echo "Repo resource folder is [${REPO_RESOURCE}]"
+echo "KeyVal resource folder is [${KEYVAL_RESOURCE}]"
+
+# import common functions
+source "${ROOT_FOLDER}/${REPO_RESOURCE}/ci/resource-utils.sh"
+
+# export passed properties to env
+exportKeyValProperties
 
 echo ""
 echo " .. Running build"
 echo ""
+
+env
+
+exit 1;
+
+
+
+#  BUILD_ID:
+#  BUILD_TEAM_NAME:
+#  BUILD_PIPELINE_NAME:
+#  build_number: "${BUILD_ID}"
+#  build_name: "http://localhost:8080/teams/${BUILD_TEAM_NAME}/pipelines/${BUILD_PIPELINE_NAME}"
+  # ATC_EXTERNAL_URL:
+  # BUILD_ID:
+  # BUILD_JOB_NAME:
+  # BUILD_NAME:
+  # BUILD_PIPELINE_NAME:
+  # BUILD_TEAM_NAME:
+
+
+
 # export atc_external_url="$(cat metadata/atc-external-url)";
 # export build_id="$(cat metadata/build-id)";
 # export build_job_name="$(cat metadata/build-job-name)";
@@ -102,5 +130,8 @@ jfrog rt u "../build-output/*" "example-repo-local/${group}/${vers}/" --dry-run
 echo ""
 echo " Build completed!!!"
 echo ""
+
+
+passKeyValProperties
 
 exit 1;
