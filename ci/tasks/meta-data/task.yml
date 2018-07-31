@@ -4,10 +4,7 @@ platform: linux
 image_resource:
   type: docker-image
   source:
-    repository: askxtreme/java8-node
-    tag: base
-    # username: ((docker-user))
-    # password: ((docker-passwd))
+    repository: alpine
 
 inputs:
   - name: metadata
@@ -21,21 +18,6 @@ params:
   TERM: -dumb
   GRADLE_OPTS: -Dorg.gradle.native=false
   GROUP:
-#  BUILD_ID:
-#  BUILD_TEAM_NAME:
-#  BUILD_PIPELINE_NAME:
-#  build_number: "${BUILD_ID}"
-#  build_name: "http://localhost:8080/teams/${BUILD_TEAM_NAME}/pipelines/${BUILD_PIPELINE_NAME}"
-  # ATC_EXTERNAL_URL:
-  # BUILD_ID:
-  # BUILD_JOB_NAME:
-  # BUILD_NAME:
-  # BUILD_PIPELINE_NAME:
-  # BUILD_TEAM_NAME:
-
-#run:
-#  path: "service-repo/gradlew"
-#  args: ["--build-file", "source-code/build.gradle", "build"]
 
 run:
   path: service-repo/ci/tasks/meta-data/task.sh
