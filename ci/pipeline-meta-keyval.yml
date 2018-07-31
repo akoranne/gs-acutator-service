@@ -48,6 +48,12 @@ jobs:
   - task: build-and-upload
     privileged: true
     file: service-repo/ci/tasks/build-service/task.yml
+    params:
+      JFROG_SERVER: ((jfrog-server))
+      JFROG_URL: ((jfrog-url))
+      JFROG_USER: ((jfrog-user))
+      JFROG_PASSWORD: ((jfrog-password))
+      JFROG_LOCATION: {{jfrog-location}}
   - put: keyval
     params:
       file: keyvalout/keyval.properties
