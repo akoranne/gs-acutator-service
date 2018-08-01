@@ -21,7 +21,7 @@ exportKeyValProperties
 
 echo ""
 echo " Downloading build"
-echo " ...Build Id:  ${PASSED_build_number}"
+echo " ...Build Id:  ${PASSED_build_id}"
 echo " ...Build Url: ${PASSED_build_name}"
 echo ""
 
@@ -45,7 +45,7 @@ jfrog rt show
 jfrog rt dl "${PASSED_jfrog_path}" ${BUILD_OUTPUT}/ \
   --flat=false \
   --build-name="${PASSED_build_name}" \
-  --build-number="${PASSED_build_number}"
+  --build-number="${PASSED_build_id}"
 #  --dry-run
 
 ls -l ${BUILD_OUTPUT}
