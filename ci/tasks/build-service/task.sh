@@ -9,7 +9,11 @@ export KEYVAL_RESOURCE=keyval
 export KEYVALOUTPUT_RESOURCE=keyvalout
 export BUILD_OUTPUT="${ROOT_FOLDER}/build-output"
 
+propsDir="${ROOT_FOLDER}/${KEYVALOUTPUT_RESOURCE}"
+propsFile="${propsDir}/keyval.properties"
+
 echo "Root folder is [${ROOT_FOLDER}]"
+echo "Build output folder is [${BUILD_OUTPUT}]"
 echo "Repo resource folder is [${REPO_RESOURCE}]"
 echo "KeyVal resource folder is [${KEYVAL_RESOURCE}]"
 
@@ -48,9 +52,10 @@ export vers=${vers%-*};
 echo " .. current version - ${vers} ";
 
 # go back
-cd ../../
+cd $REPO_RESOURCE
 
 # copy the reports of the tests to the output folder
+mkdir -p ${BUILD_OUTPUT}/reports
 cp -rfv build/reports  ${BUILD_OUTPUT}/reports
 
 # generate pdf documents from markdown and asciidocs
@@ -65,11 +70,6 @@ ls -l ${BUILD_OUTPUT}
 
 echo " .. TODO - need artifactory endpoints "
 
-# TODO: CTS
-# move the files from 'test-output' to Artifactory
-#
-#
-
 # metadata variables
 group=${group}
 build_number="${build_id}"
@@ -78,11 +78,12 @@ build_name="${atc_external_url}/teams/${build_team_name}/pipelines/${build_pipel
 # cd to the output folder
 cd ${BUILD_OUTPUT}
 
-
-echo "Artifactory info .."
+echo "Artifactory endpoint info - "
 echo "  ${JFROG_SERVER} "
 echo "  ${JFROG_URL}"
 echo "  ${JFROG_LOCATION}"
+export jfrog_path="${JFROG_LOCATION}/${group}/${vers}/"
+echo "  ${jfrog_path}"
 
 jfrog rt config "${JFROG_SERVER}" \
     --user="${JFROG_USER}" --password="${JFROG_PASSWORD}" \
@@ -92,7 +93,7 @@ jfrog rt config "${JFROG_SERVER}" \
 jfrog rt show
 
 # copy all files from current location
-jfrog rt u "*" "${JFROG_LOCATION}/${group}/${vers}/" \
+jfrog rt u "*" "${jfrog_path}" \
   --flat=false \
   --build-name="${build_name}" \
   --build-number="${build_number}"
@@ -109,3 +110,6 @@ echo ""
 
 # write passed properties out
 passKeyValProperties
+# also write out the archive version and full path
+echo "vers=${vers}" >> "${propsFile}"
+echo "jfrog_path=${jfrog_path}" >> "${propsFile}"
