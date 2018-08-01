@@ -78,6 +78,12 @@ build_name="${atc_external_url}/teams/${build_team_name}/pipelines/${build_pipel
 # cd to the output folder
 cd ${BUILD_OUTPUT}
 
+
+echo "Artifactory info .."
+echo "  ${JFROG_SERVER} "
+echo "  ${JFROG_URL}"
+echo "  ${JFROG_LOCATION}"
+
 jfrog rt config "${JFROG_SERVER}" \
     --user="${JFROG_USER}" --password="${JFROG_PASSWORD}" \
     --url="${JFROG_URL}"
