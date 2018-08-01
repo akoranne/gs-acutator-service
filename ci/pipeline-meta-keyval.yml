@@ -83,7 +83,7 @@ jobs:
   - get: keyval
   - get: service-repo
     passed:
-    - dev-deploy
+    - deploy-dev
 #    trigger: true
   - task: build-download
     privileged: true
