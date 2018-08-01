@@ -11,21 +11,19 @@ propsFile="${propsDir}/keyval.properties"
 mkdir -p "${ROOT_FOLDER}/${KEYVALOUTPUT_RESOURCE}"
 touch "${propsFile}"
 
+# import common functions
+source "${ROOT_FOLDER}/${REPO_RESOURCE}/ci/tasks/resource-utils.sh"
+
 echo ""
 echo " .. Running 'meta-data' task"
 echo ""
 
-export atc_external_url="$(cat metadata/atc-external-url)";
-export build_id="$(cat metadata/build-id)";
-export build_job_name="$(cat metadata/build-job-name)";
-export build_name="$(cat metadata/build-name)";
-export build_pipeline_name="$(cat metadata/build-pipeline-name)";
-export build_team_name="$(cat metadata/build-team-name)";
+export PASSED_atc_external_url="$(cat metadata/atc-external-url)";
+export PASSED_build_id="$(cat metadata/build-id)";
+export PASSED_build_job_name="$(cat metadata/build-job-name)";
+export PASSED_build_name="$(cat metadata/build-name)";
+export PASSED_build_pipeline_name="$(cat metadata/build-pipeline-name)";
+export PASSED_build_team_name="$(cat metadata/build-team-name)";
 
-echo "atc_external_url=${atc_external_url}" >> "${propsFile}"
-echo "build_id=${build_id}" >> "${propsFile}"
-echo "build_job_name=${build_job_name}" >> "${propsFile}"
-echo "build_name=${build_name}" >> "${propsFile}"
-echo "build_pipeline_name=${build_pipeline_name}" >> "${propsFile}"
-echo "build_team_name=${build_team_name}" >> "${propsFile}"
-echo "group=${GROUP}" >> "${propsFile}"
+# write passed properties out
+passKeyValProperties

@@ -9,9 +9,6 @@ export KEYVAL_RESOURCE=keyval
 export KEYVALOUTPUT_RESOURCE=keyvalout
 export BUILD_OUTPUT="${ROOT_FOLDER}/build-output"
 
-propsDir="${ROOT_FOLDER}/${KEYVALOUTPUT_RESOURCE}"
-propsFile="${propsDir}/keyval.properties"
-
 echo "Root folder is [${ROOT_FOLDER}]"
 echo "Repo resource folder is [${REPO_RESOURCE}]"
 echo "KeyVal resource folder is [${KEYVAL_RESOURCE}]"
@@ -24,8 +21,8 @@ exportKeyValProperties
 
 echo ""
 echo " Downloading build"
-echo " ...Build Id:  ${build_number}"
-echo " ...Build Url: ${build_name}"
+echo " ...Build Id:  ${PASSED_build_number}"
+echo " ...Build Url: ${PASSED_build_name}"
 echo ""
 
 # cd to the output folder
@@ -45,10 +42,10 @@ jfrog rt config "${JFROG_SERVER}" \
 jfrog rt show
 
 # copy all files from current location
-jfrog rt dl "${jfrog_path}" ${BUILD_OUTPUT}/ \
+jfrog rt dl "${PASSED_jfrog_path}" ${BUILD_OUTPUT}/ \
   --flat=false \
-  --build-name="${build_name}" \
-  --build-number="${build_number}"
+  --build-name="${PASSED_build_name}" \
+  --build-number="${PASSED_build_number}"
 #  --dry-run
 
 ls -l ${BUILD_OUTPUT}

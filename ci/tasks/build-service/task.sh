@@ -46,10 +46,10 @@ cp build/libs/*.jar ${BUILD_OUTPUT}
 cd build/libs
 
 # get the file name from the archive
-export vers=$(ls -1 *.jar);
-export vers=${vers%-*};
+export PASSED_vers=$(ls -1 *.jar);
+export PASSED_vers=${PASSED_vers%-*};
 # export vers=${vers##*-};
-echo " .. current version - ${vers} ";
+echo " .. current version - ${PASSED_vers} ";
 
 # go back
 cd ../../
@@ -71,9 +71,9 @@ ls -l ${BUILD_OUTPUT}
 echo " .. TODO - need artifactory endpoints "
 
 # metadata variables
-group=${group}
-build_number="${build_id}"
-build_name="${atc_external_url}/teams/${build_team_name}/pipelines/${build_pipeline_name}"
+PASSED_group=${group}
+PASSED_build_number="${PASSED_build_id}"
+PASSED_build_name="${PASSED_atc_external_url}/teams/${PASSED_build_team_name}/pipelines/${PASSED_build_pipeline_name}"
 
 # cd to the output folder
 cd ${BUILD_OUTPUT}
@@ -82,8 +82,8 @@ echo "Artifactory endpoint info - "
 echo "  ${JFROG_SERVER} "
 echo "  ${JFROG_URL}"
 echo "  ${JFROG_LOCATION}"
-export jfrog_path="${JFROG_LOCATION}/${group}.${vers}/"
-echo "  ${jfrog_path}"
+export PASSED_jfrog_path="${JFROG_LOCATION}/${PASSED_group}.${PASSED_vers}/"
+echo "  ${PASSED_jfrog_path}"
 
 jfrog rt config "${JFROG_SERVER}" \
     --user="${JFROG_USER}" --password="${JFROG_PASSWORD}" \
@@ -93,34 +93,19 @@ jfrog rt config "${JFROG_SERVER}" \
 jfrog rt show
 
 # copy all files from current location
-jfrog rt u "*" "${jfrog_path}" \
+jfrog rt u "*" "${PASSED_jfrog_path}" \
   --flat=false \
-  --build-name="${build_name}" \
-  --build-number="${build_number}"
+  --build-name="${PASSED_build_name}" \
+  --build-number="${PASSED_build_number}"
 #  --dry-run
 
 # jfrog rt d "../build-output/*" libs-release-local/zipFiles/
 
 echo ""
-echo " Build Id:  ${build_number}"
-echo " Build Url: ${build_name}"
+echo " Build Id:  ${PASSED_build_number}"
+echo " Build Url: ${PASSED_build_name}"
 echo " Build completed!!!"
 echo ""
-
-# also write out the archive version and full path
-export PASSED_atc_external_url="${atc_external_url}";
-export PASSED_build_id="${build_id}";
-export PASSED_build_job_name="${build_job_name}";
-export PASSED_build_name="${build_name}";
-export PASSED_build_pipeline_name="${build_pipeline_name}";
-export PASSED_build_team_name="${build_team_name}";
-export PASSED_group="${group}";
-export PASSED_vers=${vers}
-export PASSED_jfrog_path=${jfrog_path}
-
-
-# echo "vers=${vers}" >> "${propsFile}"
-# echo "jfrog_path=${jfrog_path}" >> "${propsFile}"
 
 # write passed properties out
 passKeyValProperties
