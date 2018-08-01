@@ -23,6 +23,24 @@ resources:
     branch: {{git-branch}}
     # username: ((git-username))
     # password: ((git-passwd))
+- name: deploy-dev
+  type: cf
+  source:
+    api:             {{pws-api}}
+    username:        ((deploy-username))
+    password:        ((deploy-password))
+    organization:    {{pws-organization}}
+    space:           {{pws-dev-space}}
+    skip_cert_check: true
+# - name: deploy-test
+#   type: cf
+#   source:
+#     api:             {{pws-api}}
+#     username:        ((deploy-username))
+#     password:        ((deploy-password))
+#     organization:    {{pws-organization}}
+#     space:           {{pws-test-space}}
+#     skip_cert_check: true
 
 jobs:
 - name: meta-data
@@ -77,23 +95,59 @@ jobs:
   - put: keyval
     params:
       file: keyvalout/keyval.properties
+  - put: deploy-dev
+    params:
+      manifest: build-output/manifest.yml
+      path: build-output/*.jar
 
-- name: deploy-test
+- name: dev-smoke-test
+  serial: true
   plan:
   - get: keyval
   - get: service-repo
-    passed:
-    - deploy-dev
 #    trigger: true
-  - task: build-download
+    passed: [ build, deploy-dev ]
+  - task: smoke-test-dev
     privileged: true
-    file: service-repo/ci/tasks/build-download/task.yml
-    params:
-      JFROG_SERVER: ((jfrog-server))
-      JFROG_URL: ((jfrog-url))
-      JFROG_USER: ((jfrog-user))
-      JFROG_PASSWORD: ((jfrog-password))
-      JFROG_LOCATION: {{jfrog-location}}
+    file: service-repo/ci/tasks/smoke-test/task.yml
   - put: keyval
     params:
       file: keyvalout/keyval.properties
+
+# - name: deploy-test
+#   plan:
+#   - get: keyval
+#   - get: service-repo
+#     passed:
+#     - dev-smoke-test
+# #    trigger: true
+#   - task: build-download
+#     privileged: true
+#     file: service-repo/ci/tasks/build-download/task.yml
+#     params:
+#       JFROG_SERVER: ((jfrog-server))
+#       JFROG_URL: ((jfrog-url))
+#       JFROG_USER: ((jfrog-user))
+#       JFROG_PASSWORD: ((jfrog-password))
+#       JFROG_LOCATION: {{jfrog-location}}
+#   - put: keyval
+#     params:
+#       file: keyvalout/keyval.properties
+#   - put: deploy-test
+#     params:
+#       manifest: build-output/manifest.yml
+#       path: build-output/*.jar
+#
+# - name: test-smoke-test
+#   serial: true
+#   plan:
+#   - get: keyval
+#   - get: service-repo
+# #    trigger: true
+#     passed: [ deploy-test ]
+#   - task: smoke-test-test
+#     privileged: true
+#     file: service-repo/ci/tasks/smoke-test/task.yml
+#   - put: keyval
+#     params:
+#       file: keyvalout/keyval.properties
