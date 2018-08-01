@@ -28,26 +28,31 @@ echo ""
 # cd to the output folder
 cd ${BUILD_OUTPUT}
 
-echo "Artifactory endpoint info - "
-echo "  ${JFROG_SERVER} "
-echo "  ${JFROG_URL}"
-echo "  ${JFROG_LOCATION}"
-echo "  ${jfrog_path}"
+export jf_instance="${JFROG_SERVER:-rt-server-1}"
+export jf_user="${JFROG_USER:-admin}"
+export jf_passwd="${JFROG_PASSWORD:-password}"
+export jf_url="${JFROG_URL:-http://artifactory:8081/artifactory}"
 
-jfrog rt config "${JFROG_SERVER}" \
-    --user="${JFROG_USER}" --password="${JFROG_PASSWORD}" \
-    --url="${JFROG_URL}"
+echo "Artifactory endpoint info - "
+echo ".... ${jf_instance} "
+echo ".... ${jf_url}"
+echo ".... ${jf_user}"
+
+jfrog rt config "${jf_instance}" \
+    --user="${jf_user}" --password="${jf_passwd}" \
+    --url="${jf_url}"
 
 # show
 jfrog rt show
 
 # copy all files from current location
 jfrog rt dl "${PASSED_jfrog_path}" ${BUILD_OUTPUT}/ \
-  --flat=false \
+  --flat=true \
   --build-name="${PASSED_build_name}" \
   --build-number="${PASSED_build_id}"
 #  --dry-run
 
+pwd
 ls -l ${BUILD_OUTPUT}
 
 echo ""
