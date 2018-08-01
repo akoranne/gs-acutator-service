@@ -108,8 +108,17 @@ echo " Build completed!!!"
 echo ""
 
 # also write out the archive version and full path
+export PASSED_atc_external_url="${atc_external_url}";
+export PASSED_build_id="${build_id}";
+export PASSED_build_job_name="${build_job_name}";
+export PASSED_build_name="${build_name}";
+export PASSED_build_pipeline_name="${build_pipeline_name}";
+export PASSED_build_team_name="${build_team_name}";
+export PASSED_group="${group}";
 export PASSED_vers=${vers}
 export PASSED_jfrog_path=${jfrog_path}
+
+
 # echo "vers=${vers}" >> "${propsFile}"
 # echo "jfrog_path=${jfrog_path}" >> "${propsFile}"
 
