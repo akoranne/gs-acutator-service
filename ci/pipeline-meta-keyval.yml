@@ -57,16 +57,43 @@ jobs:
   - put: keyval
     params:
       file: keyvalout/keyval.properties
-#       config:
-#         platform: linux
-#         image_resource:
-#           type: docker-image
-#           source:
-#             repository: busybox
-#         outputs:
-#           - name: build_output
-#         run:
-#           path: sh
-#           args:
-#             - -exc
-#             - |
+
+- name: deploy-dev
+  plan:
+  - get: keyval
+  - get: service-repo
+    passed:
+    - build
+    trigger: true
+  - task: build-download
+    privileged: true
+    file: service-repo/ci/tasks/build-download/task.yml
+    params:
+      JFROG_SERVER: ((jfrog-server))
+      JFROG_URL: ((jfrog-url))
+      JFROG_USER: ((jfrog-user))
+      JFROG_PASSWORD: ((jfrog-password))
+      JFROG_LOCATION: {{jfrog-location}}
+  - put: keyval
+    params:
+      file: keyvalout/keyval.properties
+
+- name: deploy-test
+  plan:
+  - get: keyval
+  - get: service-repo
+    passed:
+    - dev-deploy
+#    trigger: true
+  - task: build-download
+    privileged: true
+    file: service-repo/ci/tasks/build-download/task.yml
+    params:
+      JFROG_SERVER: ((jfrog-server))
+      JFROG_URL: ((jfrog-url))
+      JFROG_USER: ((jfrog-user))
+      JFROG_PASSWORD: ((jfrog-password))
+      JFROG_LOCATION: {{jfrog-location}}
+  - put: keyval
+    params:
+      file: keyvalout/keyval.properties
