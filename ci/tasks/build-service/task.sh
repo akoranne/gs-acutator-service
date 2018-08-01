@@ -52,7 +52,7 @@ export vers=${vers%-*};
 echo " .. current version - ${vers} ";
 
 # go back
-cd $REPO_RESOURCE
+cd ../../
 
 # copy the reports of the tests to the output folder
 mkdir -p ${BUILD_OUTPUT}/reports
