@@ -105,7 +105,7 @@ jobs:
   plan:
   - get: keyval
   - get: service-repo
-#    trigger: true
+    trigger: true
     passed: [ build, deploy-dev ]
   - task: smoke-test-dev
     privileged: true
