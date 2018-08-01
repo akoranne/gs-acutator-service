@@ -82,7 +82,7 @@ echo "Artifactory endpoint info - "
 echo "  ${JFROG_SERVER} "
 echo "  ${JFROG_URL}"
 echo "  ${JFROG_LOCATION}"
-export jfrog_path="${JFROG_LOCATION}/${group}/${vers}/"
+export jfrog_path="${JFROG_LOCATION}/${group}.${vers}/"
 echo "  ${jfrog_path}"
 
 jfrog rt config "${JFROG_SERVER}" \
@@ -107,9 +107,11 @@ echo " Build Url: ${build_name}"
 echo " Build completed!!!"
 echo ""
 
+# also write out the archive version and full path
+export PASSED_vers=${vers}
+export PASSED_jfrog_path=${jfrog_path}
+# echo "vers=${vers}" >> "${propsFile}"
+# echo "jfrog_path=${jfrog_path}" >> "${propsFile}"
 
 # write passed properties out
 passKeyValProperties
-# also write out the archive version and full path
-echo "vers=${vers}" >> "${propsFile}"
-echo "jfrog_path=${jfrog_path}" >> "${propsFile}"
