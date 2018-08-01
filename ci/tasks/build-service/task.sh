@@ -71,7 +71,6 @@ ls -l ${BUILD_OUTPUT}
 echo " .. TODO - need artifactory endpoints "
 
 # metadata variables
-PASSED_group=${group}
 PASSED_build_number="${PASSED_build_id}"
 PASSED_build_name="${PASSED_atc_external_url}/teams/${PASSED_build_team_name}/pipelines/${PASSED_build_pipeline_name}"
 
