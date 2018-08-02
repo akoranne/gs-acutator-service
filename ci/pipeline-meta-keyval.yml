@@ -100,7 +100,7 @@ jobs:
       manifest: build-output/manifest.yml
       path: build-output/*.jar
 
-- name: dev-smoke-test
+- name: smoke-dev
   serial: true
   plan:
   - get: keyval
@@ -119,7 +119,7 @@ jobs:
 #   - get: keyval
 #   - get: service-repo
 #     passed:
-#     - dev-smoke-test
+#     - smoke-dev
 # #    trigger: true
 #   - task: build-download
 #     privileged: true
@@ -138,7 +138,7 @@ jobs:
 #       manifest: build-output/manifest.yml
 #       path: build-output/*.jar
 #
-# - name: test-smoke-test
+# - name: smoke-test
 #   serial: true
 #   plan:
 #   - get: keyval
