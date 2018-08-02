@@ -10,12 +10,18 @@ Login to Concourse
 	$> fly -t concourse login -c http://192.168.100.4:8080
 ```
 
-Add the pipeline and unpause it.
+Deploy the develop pipeline and unpause it.
 ```
-  $> fly -t concourse set-pipeline -p gs-acutator-service-rel -c pipeline-create-release.yml -l secrets
+	$> fly -t concourse sp -p gs-acutator-service-develop -c pipeline-develop.yml -l secrets --var=git-branch=develop
+	$> fly -t concourse unpause-pipeline --pipeline gs-acutator-service-develop
+	$> fly -t concourse pipelines
+```
 
-	$> fly -t concourse unpause-pipeline --pipeline gs-acutator-service-rel
-
+This project has the release pipeline, for pushing to stage and manual deploy to prod.
+Deploy the release pipeline and unpause it.
+```
+	$> fly -t concourse sp -p gs-acutator-service-release -c pipeline-develop.yml -l secrets --var=git-branch=master
+	$> fly -t concourse unpause-pipeline --pipeline gs-acutator-service-release
 	$> fly -t concourse pipelines
 ```
 
