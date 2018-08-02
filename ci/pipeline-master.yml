@@ -1,0 +1,157 @@
+resource_types:
+- name: meta
+  type: docker-image
+  source:
+    repository: swce/metadata-resource
+    tag: latest
+
+- name: keyval
+  type: docker-image
+  source:
+    repository: swce/keyval-resource
+    tag: latest
+
+resources:
+- name: metadata
+  type: meta
+- name: keyval
+  type: keyval
+- name: service-repo
+  type: git
+  source:
+    uri: {{git-url}}
+    branch: {{git-branch}}
+    # username: ((git-username))
+    # password: ((git-passwd))
+- name: deploy-dev
+  type: cf
+  source:
+    api:             {{pws-api}}
+    username:        ((deploy-username))
+    password:        ((deploy-password))
+    organization:    {{pws-organization}}
+    space:           {{pws-dev-space}}
+    skip_cert_check: true
+- name: deploy-test
+  type: cf
+  source:
+    api:             {{pws-api}}
+    username:        ((deploy-username))
+    password:        ((deploy-password))
+    organization:    {{pws-organization}}
+    space:           {{pws-test-space}}
+    skip_cert_check: true
+
+jobs:
+- name: meta-data
+  plan:
+  - get: metadata
+  - get: service-repo
+    trigger: true
+  - task: gen-meta-data
+    file: service-repo/ci/tasks/meta-data/task.yml
+    params:
+      GROUP: {{group}}
+  - put: keyval
+    params:
+      file: keyvalout/keyval.properties
+
+- name: build
+  plan:
+  - get: keyval
+  - get: service-repo
+    passed:
+    - meta-data
+    trigger: true
+  - task: build-and-upload
+    privileged: true
+    file: service-repo/ci/tasks/build-service/task.yml
+    params:
+      JFROG_SERVER: ((jfrog-server))
+      JFROG_URL: ((jfrog-url))
+      JFROG_USER: ((jfrog-user))
+      JFROG_PASSWORD: ((jfrog-password))
+      JFROG_LOCATION: {{jfrog-location}}
+  - put: keyval
+    params:
+      file: keyvalout/keyval.properties
+
+- name: deploy-dev
+  plan:
+  - get: keyval
+  - get: service-repo
+    passed:
+    - build
+    trigger: true
+  - task: build-download
+    privileged: true
+    file: service-repo/ci/tasks/build-download/task.yml
+    params:
+      JFROG_SERVER: ((jfrog-server))
+      JFROG_URL: ((jfrog-url))
+      JFROG_USER: ((jfrog-user))
+      JFROG_PASSWORD: ((jfrog-password))
+      JFROG_LOCATION: {{jfrog-location}}
+  - put: keyval
+    params:
+      file: keyvalout/keyval.properties
+  - put: deploy-dev
+    params:
+      manifest: build-output/manifest.yml
+      path: build-output/*.jar
+
+- name: smoke-dev
+  serial: true
+  plan:
+  - get: keyval
+  - get: service-repo
+    trigger: true
+    passed: [ build, deploy-dev ]
+  - task: smoke-test-dev
+    privileged: true
+    file: service-repo/ci/tasks/smoke-test/task.yml
+    params:
+      TARGET_ENV: "development"
+  - put: keyval
+    params:
+      file: keyvalout/keyval.properties
+
+- name: deploy-test
+  plan:
+  - get: keyval
+  - get: service-repo
+    passed:
+      - smoke-dev
+    trigger: true
+  - task: build-download
+    privileged: true
+    file: service-repo/ci/tasks/build-download/task.yml
+    params:
+      JFROG_SERVER: ((jfrog-server))
+      JFROG_URL: ((jfrog-url))
+      JFROG_USER: ((jfrog-user))
+      JFROG_PASSWORD: ((jfrog-password))
+      JFROG_LOCATION: {{jfrog-location}}
+  - put: keyval
+    params:
+      file: keyvalout/keyval.properties
+  - put: deploy-test
+    params:
+      manifest: build-output/manifest.yml
+      path: build-output/*.jar
+
+- name: smoke-test
+  serial: true
+  plan:
+  - get: keyval
+  - get: service-repo
+    trigger: true
+    passed: [ deploy-test ]
+  - task: smoke-test-test
+    privileged: true
+    file: service-repo/ci/tasks/smoke-test/task.yml
+    params:
+      TARGET_ENV: "test"
+  - put: keyval
+    params:
+      file: keyvalout/keyval.properties
