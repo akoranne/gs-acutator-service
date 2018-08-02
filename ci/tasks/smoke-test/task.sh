@@ -31,16 +31,17 @@ cd $REPO_RESOURCE
 
 # execute newman tests
 
-if [[ ! -z "${TARGET_ENV}" ]]; then
-
-  export SMOKE_TEST_FILE="src/main/resources/postman/smoke-test.postman_collection.json"
-
+export SMOKE_TEST_FILE="src/main/resources/postman/smoke-test.postman_collection.json"
+if [ ! -z "${TARGET_ENV}" ]; then
   if [[ "${TARGET_ENV}" == "development" ]]; then
   		echo ""
       export SMOKE_TEST_FILE="src/main/resources/postman/smoke-test-dev.postman_collection.json"
   fi;
-  newman run "${SMOKE_TEST_FILE}" | tee ../test-output/smoke_test_results.out
-else
+fi;
+
+echo "  ... executing - $SMOKE_TEST_FILE"
+# run postman collection to test
+newman run "${SMOKE_TEST_FILE}" | tee ../test-output/smoke_test_results.out
 
 echo ""
 echo " .. output files "

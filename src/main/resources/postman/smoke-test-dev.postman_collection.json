@@ -11,26 +11,11 @@
 				{
 					"listen": "test",
 					"script": {
-						"id": "51d9d9c0-404d-4f96-8c3e-a5aee832a632",
+						"id": "cda26a6e-580b-478c-968b-2a8b29a4267e",
 						"type": "text/javascript",
 						"exec": [
-							"postman.cleanGlobalVariable(\"variable_key\")",
-							"",
-							"tests[\"Status code is 401\"] = responseCode.code === 401;",
-							"",
-							"tests[\"Body matches string\"] = responseBody.has(\"Unauthorized\");",
-							"",
-							"tests[\"Date is present\"] = postman.getResponseHeader(\"Date\");",
-							"",
-							"tests[\"Connection is present\"] = postman.getResponseHeader(\"Connection\");",
-							"",
-							"tests[\"Connection is keeping alive\"] = postman.getResponseHeader(\"Connection\").has(\"keep-alive\");",
-							"",
-							"tests[\"Server is present\"] = postman.getResponseHeader(\"Server\");",
-							"",
-							"tests[\"Server is nginx\"] = postman.getResponseHeader(\"Server\").has(\"nginx/1.10.1\");",
-							"",
-							"tests[\"WWW-Authentication is present\"] = postman.getResponseHeader(\"WWW-Authenticate\");"
+							"tests[\"Status code is 404\"] = responseCode.code === 404;",
+							""
 						]
 					}
 				}
@@ -50,7 +35,63 @@
 				},
 				"description": "Call the endpoint"
 			},
-			"response": []
+			"response": [
+				{
+					"id": "91464bdc-ccf1-4d55-90c0-c67031f273b7",
+					"name": "gs-actuator-service",
+					"originalRequest": {
+						"method": "GET",
+						"header": [],
+						"body": {},
+						"url": {
+							"raw": "http://gs-acutator-service.cfapps.io",
+							"protocol": "http",
+							"host": [
+								"gs-acutator-service",
+								"cfapps",
+								"io"
+							]
+						}
+					},
+					"status": "Not Found",
+					"code": 404,
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "Connection",
+							"value": "keep-alive",
+							"name": "Connection",
+							"description": "Options that are desired for the connection"
+						},
+						{
+							"key": "Content-Length",
+							"value": "121",
+							"name": "Content-Length",
+							"description": "The length of the response body in octets (8-bit bytes)"
+						},
+						{
+							"key": "Content-Type",
+							"value": "application/json;charset=UTF-8",
+							"name": "Content-Type",
+							"description": "The mime type of this content"
+						},
+						{
+							"key": "Date",
+							"value": "Thu, 02 Aug 2018 00:41:06 GMT",
+							"name": "Date",
+							"description": "The date and time that the message was sent"
+						},
+						{
+							"key": "X-Vcap-Request-Id",
+							"value": "a7b652fb-7ec6-47a8-5f1c-41fe02b38633",
+							"name": "X-Vcap-Request-Id",
+							"description": "Custom header"
+						}
+					],
+					"cookie": [],
+					"body": "{\"timestamp\":\"2018-08-02T00:41:06.342+0000\",\"status\":404,\"error\":\"Not Found\",\"message\":\"No message available\",\"path\":\"/\"}"
+				}
+			]
 		},
 		{
 			"name": "gs-actuator-service-hello",
@@ -58,26 +99,23 @@
 				{
 					"listen": "test",
 					"script": {
-						"id": "51d9d9c0-404d-4f96-8c3e-a5aee832a632",
+						"id": "4beb68b2-b236-4b67-b8d6-f7ed6c357943",
 						"type": "text/javascript",
 						"exec": [
-							"postman.cleanGlobalVariable(\"variable_key\")",
+							"pm.test(\"Content-Type is present\", function () {",
+							"    pm.response.to.have.header(\"Content-Type\");",
+							"});",
+							"pm.test(\"Response time is less than 200ms\", function () {",
+							"    pm.expect(pm.response.responseTime).to.be.below(200);",
+							"});",
+							"tests[\"Status code is 200\"] = responseCode.code === 200;",
+							"tests[\"Returned results has 'id'\"] = responseBody.has(\"id\");",
+							"tests[\"Returned results has 'content'\"] = responseBody.has(\"content\");",
 							"",
-							"tests[\"Status code is 401\"] = responseCode.code === 401;",
-							"",
-							"tests[\"Body matches string\"] = responseBody.has(\"Unauthorized\");",
-							"",
-							"tests[\"Date is present\"] = postman.getResponseHeader(\"Date\");",
-							"",
-							"tests[\"Connection is present\"] = postman.getResponseHeader(\"Connection\");",
-							"",
-							"tests[\"Connection is keeping alive\"] = postman.getResponseHeader(\"Connection\").has(\"keep-alive\");",
-							"",
-							"tests[\"Server is present\"] = postman.getResponseHeader(\"Server\");",
-							"",
-							"tests[\"Server is nginx\"] = postman.getResponseHeader(\"Server\").has(\"nginx/1.10.1\");",
-							"",
-							"tests[\"WWW-Authentication is present\"] = postman.getResponseHeader(\"WWW-Authenticate\");"
+							"pm.test(\"Content should be - Hello, Stranger!\", function () {",
+							"    var jsonData = pm.response.json();",
+							"    pm.expect(jsonData.content).to.eql(\"Hello, Stranger!\");",
+							"});"
 						]
 					}
 				}
@@ -100,7 +138,66 @@
 				},
 				"description": "Call the endpoint"
 			},
-			"response": []
+			"response": [
+				{
+					"id": "d5b0018f-0ed8-484d-9497-a06b9fa0a424",
+					"name": "gs-actuator-service-hello",
+					"originalRequest": {
+						"method": "GET",
+						"header": [],
+						"body": {},
+						"url": {
+							"raw": "http://gs-acutator-service.cfapps.io/hello-world",
+							"protocol": "http",
+							"host": [
+								"gs-acutator-service",
+								"cfapps",
+								"io"
+							],
+							"path": [
+								"hello-world"
+							]
+						}
+					},
+					"status": "OK",
+					"code": 200,
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "Connection",
+							"value": "keep-alive",
+							"name": "Connection",
+							"description": "Options that are desired for the connection"
+						},
+						{
+							"key": "Content-Length",
+							"value": "37",
+							"name": "Content-Length",
+							"description": "The length of the response body in octets (8-bit bytes)"
+						},
+						{
+							"key": "Content-Type",
+							"value": "application/json;charset=UTF-8",
+							"name": "Content-Type",
+							"description": "The mime type of this content"
+						},
+						{
+							"key": "Date",
+							"value": "Thu, 02 Aug 2018 00:40:41 GMT",
+							"name": "Date",
+							"description": "The date and time that the message was sent"
+						},
+						{
+							"key": "X-Vcap-Request-Id",
+							"value": "60bbc417-774e-46b8-4e3b-b71b31c9bd73",
+							"name": "X-Vcap-Request-Id",
+							"description": "Custom header"
+						}
+					],
+					"cookie": [],
+					"body": "{\"id\":2,\"content\":\"Hello, Stranger!\"}"
+				}
+			]
 		}
 	]
 }
