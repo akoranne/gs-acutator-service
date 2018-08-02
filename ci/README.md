@@ -27,5 +27,13 @@ Deploy the release pipeline and unpause it.
 
 
 ## References
-* https://github.com/olhtbr/metadata-resource
+
+Resources:
+
+* https://hub.docker.com/r/swce/keyval-resource
+* https://hub.docker.com/r/swce/metadata-resource/
+* https://hub.docker.com/r/askxtreme/java8-node/
+
+* https://github.com/SWCE/keyval-resource
 * https://github.com/SWCE/metadata-resource
+* https://github.com/akoranne/docker-recipes/tree/master/java8-node
