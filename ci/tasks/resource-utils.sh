@@ -18,7 +18,7 @@ function exportKeyValProperties() {
 	  do
 		if [ ! -z "${var}" ]
 		then
-			echo "...Adding: ${var}"
+#			echo "...Adding: ${var}"
 			export "$var"
 		fi
 	  done < "${props}"
@@ -35,7 +35,7 @@ function passKeyValProperties() {
 	  echo "Setting key values for next job in ${propsFile}"
 	  while IFS='=' read -r name value ; do
 		if [[ "${name}" == 'PASSED_'* ]]; then
-			echo "...Adding: ${name}=${value}"
+#			echo "...Adding: ${name}=${value}"
 			echo "${name}=${value}" >> "${propsFile}"
 		fi
 		done < <(env)

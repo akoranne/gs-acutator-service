@@ -18,6 +18,6 @@ params:
   JFROG_USER:
   JFROG_PASSWORD:
   JFROG_LOCATION:
-  TARGET_ENV: "development"
+  TARGET_ENV: 
 run:
   path: service-repo/ci/tasks/smoke-test/task.sh
