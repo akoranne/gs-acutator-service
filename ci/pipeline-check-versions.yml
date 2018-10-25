@@ -1,0 +1,78 @@
+---
+resources:
+
+# gets the git tools archive.
+- name: service-repo-release
+  type: github-release
+  source:
+    repository: concourse
+    user: ((git-username))
+    access_token: ((github-access-token))
+# gets the git tools archive.
+- name: github-tool    # https://hub.github.com
+  type: github-release
+  source:
+    repository: hub
+    user: github
+    access_token: ((github-access-token))
+    pre_release: true
+# gets the wiki repo, 'build' branch, holds snapshot version files.
+- name: repo-wiki
+  type: git
+  source:
+    uri: {{github-repo-wiki}}
+    branch: build
+    username: ((git-username))
+    password: ((git-password))
+# gets the wiki repo, 'master' branch, holds release version files.
+- name: deployment-approval
+  type: git
+  source:
+    uri: {{github-repo-wiki}}
+    branch: master
+    paths:
+      - "environments/release/environment.json"
+
+jobs:
+- name: Test-release
+  plan:
+  - get: service-repo-release
+    params:
+      globs:
+      - fly_linux_amd64
+    trigger: true
+  - get: repo-wiki
+  - get: github-tool
+    params:
+      globs:
+      - hub-linux-amd64-*.tgz
+
+  - task: test-release-and-update-repo-wiki
+    config:
+      platform: linux
+      image_resource:
+        type: docker-image
+        source:
+          repository: concourse/buildroot
+          tag: "git"
+      inputs:
+        - name: service-repo-release
+        - name: repo-wiki
+        - name: github-tool
+      outputs:
+        - name: repo-wiki-output
+      run:
+        path: sh
+        args:
+        - -exc
+        - |
+          echo "Your test procedures would go here. If successfull, update deployment control repo with verified version information"
+          export LATEST_GOOD_VERSION=$(cat ./service-repo-release/version)
+          export CURRENT_TIMESTAMP=$(date +"%Y%m%d%H%M%S")
+          cp -R repo-wiki/. repo-wiki-output  # duplicate git repo files for update
+          cd repo-wiki-output
+          git checkout build    # make changes to a branch other than master
+          sed -i "s/\"version\": .*/\"version\": \"$LATEST_GOOD_VERSION\",/g" {{github-environment-control-file-path}}
+          sed -i "s/\"date-verified\": .*/\"date-verified\": \"$CURRENT_TIMESTAMP\"/g" {{github-environment-control-file-path}}
+          cat {{github-environment-control-file-path}}
+          git add . && git commit -m "Promote version $LATEST_GOOD_VERSION"  # stage changes and prep for following PUT action against git repo

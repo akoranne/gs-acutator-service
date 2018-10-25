@@ -1,0 +1,41 @@
+---
+instance_limits:
+  min: 1
+  max: 3
+rules:
+# throughput - Scale down if < 19/sec, Scale up if > 20/sec
+- rule_type: "http_throughput"
+  threshold:
+    min: 19
+    max: 24
+
+# latency - Scale down if < 199 ms, Scale up if > 200 ms, apply based on 95% of traffic average
+- rule_type: "http_latency"
+  rule_sub_type: "avg_95th"
+  threshold:
+    min: 199
+    max: 200
+
+# memory - Scale down if < 39 %, Scale up if > 40%
+- rule_type: "memory"
+  threshold:
+    min: 39
+    max: 40
+
+# cpu - Scale down if < 30, Scale up if > 90
+- rule_type: "cpu"
+  threshold:
+    min: 30
+    max: 40
+scheduled_limit_changes: []
+#scheduled_limit_changes:
+#- recurrence: 10
+#  executes_at: "2018-10-24T22:00:00Z"
+#  instance_limits:
+#    min: 5
+#    max: 20
+#- recurrence: 10
+#  executes_at: "2018-10-24T23:59:00Z"
+#  instance_limits:
+#    min: 1
+#    max: 3

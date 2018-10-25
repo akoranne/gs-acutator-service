@@ -1,0 +1,9 @@
+github-deployment-control-repo: https://github.com/akoranne/gs-acutator-service.wiki.git
+github-environment-control-file-path: environments/snapshot/environment.json
+
+git-username: YOUR-GIT-USER-NAME
+git-password: YOUR-GIT-PASSWORD
+github-access-token: YOUR-GIT-HUB-ACCESS-TOKEN
+
+email-address-sender: YOUR-EMAIL-GOES-HERE
+email-address-recipient: YOUR-EMAIL-GOES-HERE
