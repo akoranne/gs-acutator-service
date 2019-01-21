@@ -13,7 +13,7 @@ https://spring.io/guides/gs/actuator-service/
 
 #### Create Service Instance
 
-0. login to pcf
+1. login to pcf
 
 	```
 	$> cf login --skip-ssl-validation -a https://api.local2.pcfdev.io -o pcfdev-org -s pcfdev-space
@@ -26,7 +26,7 @@ https://spring.io/guides/gs/actuator-service/
 	OK
 	```
 
-0. create service instance of the config-server
+2. create service instance of the config-server
 
 	```
 	$> cf cs app-autoscaler standard autoscaler
@@ -34,6 +34,7 @@ https://spring.io/guides/gs/actuator-service/
 	```
 
 #### Deploy to PCF 
+
 1. Push to PCF
 
 	```
