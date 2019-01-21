@@ -52,6 +52,7 @@ https://spring.io/guides/gs/actuator-service/
 3. To verify the client side service lookup, goto
    
    	http://http://gs-acutator-service.<pcf-domain>/
+   	
    	http://http://gs-acutator-service.<pcf-domain>/greeting
 
 
