@@ -3,7 +3,7 @@ buildscript {
         mavenCentral()
     }
     dependencies {
-        classpath("org.springframework.boot:spring-boot-gradle-plugin:2.0.4.RELEASE")
+        classpath("org.springframework.boot:spring-boot-gradle-plugin:2.1.6.RELEASE")
     }
 }
 
@@ -28,7 +28,9 @@ targetCompatibility = 1.8
 dependencies {
     compile("org.springframework.boot:spring-boot-starter-web")
     compile("org.springframework.boot:spring-boot-starter-actuator")
-    testCompile("org.springframework.boot:spring-boot-starter-test")
-    testCompile("junit:junit")
+    testCompile('org.springframework.boot:spring-boot-starter-test')
+    testCompile('org.junit.jupiter:junit-jupiter:5.4.0')
+    testCompile('org.junit.platform:junit-platform-launcher:1.4.0')
+    testCompile('org.mockito:mockito-junit-jupiter:2.23.0')
 }
 
