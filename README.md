@@ -13,7 +13,7 @@ https://spring.io/guides/gs/actuator-service/
 
 #### Create Service Instance
 
-0. login to pcf
+1. login to pcf
 
 	```
 	$> cf login --skip-ssl-validation -a https://api.local2.pcfdev.io -o pcfdev-org -s pcfdev-space
@@ -26,7 +26,7 @@ https://spring.io/guides/gs/actuator-service/
 	OK
 	```
 
-0. create service instance of the config-server
+2. create service instance of the config-server
 
 	```
 	$> cf cs app-autoscaler standard autoscaler
@@ -34,6 +34,7 @@ https://spring.io/guides/gs/actuator-service/
 	```
 
 #### Deploy to PCF 
+
 1. Push to PCF
 
 	```
@@ -51,8 +52,11 @@ https://spring.io/guides/gs/actuator-service/
 	
 3. To verify the client side service lookup, goto
    
-   	http://http://gs-acutator-service.<pcf-domain>/
-   	http://http://gs-acutator-service.<pcf-domain>/greeting
+	```
+   	http://gs-acutator-service.<pcf-domain>/
+   	
+   	http://gs-acutator-service.<pcf-domain>/greeting
+	```
 
 
 4. Apply autoscaling rules
