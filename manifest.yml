@@ -2,7 +2,8 @@
 applications:
 - name: gs-acutator-service
   path: build/libs/gs-actuator-service-0.1.0.jar
-  # buildpack: java_buildpack_offline
+  # buildpacks:
+  # - java_buildpack_offline
   memory: 1G
   instances: 1
   services:
